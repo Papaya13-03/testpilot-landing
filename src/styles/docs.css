@@ -38,3 +38,17 @@
 	letter-spacing: -0.02em;
 	gap: 0.6rem;
 }
+/* Wide screens: Starlight pushes the text against the table of contents and lets that column grow, which leaves a gap
+   on the left. Keep the contents column at its normal width and centre the text in the space that is left. */
+:root {
+	--sl-content-width: 50rem;
+}
+@media (min-width: 72rem) {
+	.right-sidebar-container {
+		width: var(--sl-sidebar-width);
+	}
+	[data-has-sidebar][data-has-toc] .main-pane {
+		--sl-content-margin-inline: auto;
+		width: calc(100% - var(--sl-sidebar-width));
+	}
+}
