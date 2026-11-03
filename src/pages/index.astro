@@ -1,5 +1,5 @@
 ---
-// The landing page. The docs live under Starlight (src/content/docs); this page has its own layout.
+// The landing page ("flight chart" direction). The docs live under Starlight (src/content/docs); this page has its own layout.
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const docs = (slug: string) => `${base}/${slug}/`;
 
@@ -10,53 +10,27 @@ const JET =
 const JET_AT_REST = 'translate(39.2 9.2) rotate(-45) scale(0.74)';
 const MARK_VIEWBOX = '3.5 -3.6 44 44';
 
-const steps = [
-	{ n: '01', title: 'Describe', text: 'Tell the agent what to check, in plain words. Like briefing a colleague.' },
-	{ n: '02', title: 'Fly', text: 'The agent drives a real browser and saves every action as a step, with a screenshot.' },
-	{ n: '03', title: 'Autopilot', text: 'Every run after that replays the saved steps. No AI, no cost, the same answer every time.' },
+const legs = [
+	{ n: '1', route: 'WORDS → AGENT', title: 'Describe', text: 'Tell the agent what to check, in plain words, the way you would brief a colleague.', ai: 'AI · ON', on: true },
+	{ n: '2', route: 'AGENT → STEPS', title: 'Fly', text: 'The agent drives a real browser and saves every action as a step, with a screenshot.', ai: 'AI · ON, THEN SAVED', on: true },
+	{ n: '3', route: 'STEPS → RUNS', title: 'Autopilot', text: 'Every run after that replays the saved steps. No AI, no cost, the same answer every time.', ai: 'AI · OFF', on: false },
 ];
 
 const rows = [
-	{ label: 'Quick to write', v: [false, true, true] },
-	{ label: 'Free to run', v: [true, false, true] },
-	{ label: 'Same result every time', v: [true, false, true] },
-	{ label: 'Copes when the page changes', v: [false, true, true] },
-	{ label: 'You approve every change', v: [true, false, true] },
+	{ label: 'Quick to write', v: [false, true] },
+	{ label: 'Free to run', v: [true, false] },
+	{ label: 'Same result every time', v: [true, false] },
+	{ label: 'Copes when the page changes', v: [false, true] },
+	{ label: 'You approve every change', v: [true, false] },
 ];
 
-// 24-unit stroke icons.
-const icons: Record<string, string> = {
-	chat: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
-	loop: '<path d="M21 12a9 9 0 1 1-2.64-6.36L21 8"/><path d="M21 3v5h-5"/>',
-	wrench:
-		'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>',
-	camera:
-		'<path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/>',
-	lock: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
-	monitor: '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>',
-};
-const features = [
-	{ icon: 'chat', title: "Chat, don't code", text: 'No selectors, no scripts. You review the steps the agent saved.' },
-	{ icon: 'loop', title: 'Free, repeatable runs', text: 'Runs replay saved steps, so they cost nothing and give the same answer twice.' },
-	{ icon: 'wrench', title: 'Self-healing, with you in charge', text: 'When the page changes, the agent proposes a fix. Nothing changes until you accept it.' },
-	{ icon: 'camera', title: 'Every step on camera', text: 'Pass or fail, every step keeps a screenshot, so a failure explains itself.' },
-	{ icon: 'lock', title: 'Secrets stay secret', text: 'Passwords are filled in at run time. The AI sees variable names, never values.' },
-	{ icon: 'monitor', title: 'Cloud or your machine', text: 'Run in cloud browsers, or in a visible browser on your own machine with Testpilot Desktop.' },
-];
-
-// "How it flies" diagram: boxes and the flight paths between them (900 x 300).
-const flights = [
-	{ id: 'f1', d: 'M166 150 L236 150', delay: 0 },
-	{ id: 'f2', d: 'M478 128 L560 95', delay: 0.6 },
-	{ id: 'f3', d: 'M478 172 L560 205', delay: 0.9 },
-	{ id: 'f4', d: 'M742 95 L786 138', delay: 1.5 },
-	{ id: 'f5', d: 'M742 205 L786 162', delay: 1.8 },
-];
-const boxes = [
-	{ x: 20, y: 110, w: 140, h: 80, title: 'You', sub: 'describe the test' },
-	{ x: 566, y: 58, w: 170, h: 74, title: 'Cloud browsers', sub: 'Playwright workers' },
-	{ x: 566, y: 168, w: 170, h: 74, title: 'Testpilot Desktop', sub: 'your machine' },
-	{ x: 792, y: 110, w: 96, h: 80, title: 'Your app', sub: 'under test' },
+const notices = [
+	{ code: 'NOTAM 01', title: "Chat, don't code", text: 'No selectors, no scripts. You review the steps the agent saved.' },
+	{ code: 'NOTAM 02', title: 'Free, repeatable runs', text: 'Runs replay saved steps, so they cost nothing and give the same answer twice.' },
+	{ code: 'NOTAM 03', title: 'Self-healing, with you in charge', text: 'When the page changes, the agent proposes a fix. Nothing changes until you accept it.' },
+	{ code: 'NOTAM 04', title: 'Every step on camera', text: 'Pass or fail, every step keeps a screenshot, so a failure explains itself.' },
+	{ code: 'NOTAM 05', title: 'Secrets stay secret', text: 'Passwords are filled in at run time. The AI sees variable names, never values.' },
+	{ code: 'NOTAM 06', title: 'Cloud or your machine', text: 'Run in cloud browsers, or in a visible browser on your own machine with Testpilot Desktop.' },
 ];
 ---
 
@@ -65,217 +39,211 @@ const boxes = [
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<title>Testpilot · Describe the test. Testpilot flies it.</title>
-		<meta name="description" content="An AI agent turns plain words into automated web tests. Every run after that replays on autopilot: no AI, no cost, the same answer every time." />
+		<meta
+			name="description"
+			content="An AI agent plots your test from plain words. Every run after that follows the same route on autopilot: no AI, no cost, the same answer every time."
+		/>
 		<link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" />
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Caveat:wght@600&family=Geist:wght@400;500;600&display=swap"
+		/>
 	</head>
 	<body>
-		<header class="nav">
+		<header class="top">
 			<a class="brand" href={`${base}/`} aria-label="Testpilot home">
-				<svg viewBox={MARK_VIEWBOX} width="28" height="28" aria-hidden="true">
-					<path d={TICK} class="m-tick" />
-					<path d={JET} class="m-jet" transform={JET_AT_REST} />
+				<svg viewBox={MARK_VIEWBOX} width="30" height="30" aria-hidden="true">
+					<path d={TICK} class="ink-fill" />
+					<path d={JET} class="mag-fill" transform={JET_AT_REST} />
 				</svg>
 				<span>Testpilot</span>
 			</a>
 			<nav aria-label="Main">
-				<a href="#how">How it flies</a>
-				<a href="#why">Why Testpilot</a>
+				<a href="#route">Route</a>
+				<a href="#plan">Flight plan</a>
 				<a href={docs('how-it-works')}>Docs</a>
-				<a class="btn btn-small" href={docs('getting-started')}>Get started</a>
+				<a class="btn btn-ink" href={docs('getting-started')}>File a flight plan →</a>
 			</nav>
 		</header>
 
 		<main>
-			<!-- Hero -->
-			<section class="hero">
-				<div class="hero-grid" aria-hidden="true"></div>
-				<div class="hero-glow" aria-hidden="true"></div>
-				<svg class="sky" viewBox="0 0 1440 720" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-					<path id="sky-route" class="sky-trail" d="M -120 640 C 260 600, 480 380, 760 430 S 1180 250, 1580 110" />
-					<g class="sky-jet">
-						<animateMotion dur="16s" repeatCount="indefinite" rotate="auto" keyPoints="0;1" keyTimes="0;1" calcMode="linear">
-							<mpath href="#sky-route" />
-						</animateMotion>
-						<g transform="scale(1.3)"><path d={JET} /></g>
-					</g>
-				</svg>
-
-				<div class="hero-inner">
-					<svg class="hero-mark" viewBox={MARK_VIEWBOX} width="168" height="168" role="img" aria-label="Testpilot logo">
-						<defs>
-							<mask id="hero-trail" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48">
-								<path class="h-trail" d="M5.5 23.5 L18.3 32.5 L33 15.5" />
-							</mask>
-						</defs>
-						<path d={TICK} class="m-tick" mask="url(#hero-trail)" />
-						<path d={JET} class="m-jet h-jet" transform={JET_AT_REST} />
-					</svg>
-					<p class="eyebrow rise" style="--d: 0.9s">AI writes the test · Runs need no AI</p>
-					<h1 class="rise" style="--d: 1.05s">Describe the test.<br /><span class="shine">Testpilot flies it.</span></h1>
-					<p class="lede rise" style="--d: 1.2s">
-						An AI agent turns plain words into automated web tests. Every run after that replays on autopilot: no AI, no cost, the
-						same answer every time.
+			<!-- Hero: the route chart -->
+			<section class="hero" id="route">
+				<div class="hero-copy">
+					<p class="label rise" style="--d: 0.05s">CHART TP-1 · FOR TESTING PURPOSES</p>
+					<h1 class="rise" style="--d: 0.15s">Describe the test.<br /><em>Testpilot flies it.</em></h1>
+					<p class="lede rise" style="--d: 0.3s">
+						An AI agent plots the route from your plain words. After that, every run follows the same route on autopilot: no AI,
+						no cost, the same answer every time.
 					</p>
-					<div class="cta rise" style="--d: 1.35s">
-						<a class="btn btn-primary takeoff" href={docs('getting-started')}>
-							Get started
-							<svg viewBox="-12 -12 24 24" width="18" height="18" aria-hidden="true"><path d={JET} /></svg>
-						</a>
-						<a class="btn btn-ghost" href="#how">See how it flies</a>
+					<div class="cta rise" style="--d: 0.45s">
+						<a class="btn btn-mag" href={docs('getting-started')}>Get started →</a>
+						<a class="btn btn-line" href="#plan">Read the flight plan</a>
 					</div>
 				</div>
+
+				<figure class="chart rise" style="--d: 0.2s">
+					<svg viewBox="0 0 640 500" role="img" aria-label="Route chart: from your words, to the agent, to saved steps, to runs. AI only on the first legs.">
+						<g class="grid">
+							<line x1="0" y1="100" x2="640" y2="100"></line><line x1="0" y1="200" x2="640" y2="200"></line><line x1="0" y1="300" x2="640" y2="300"></line><line x1="0" y1="400" x2="640" y2="400"></line>
+							<line x1="128" y1="0" x2="128" y2="500"></line><line x1="256" y1="0" x2="256" y2="500"></line><line x1="384" y1="0" x2="384" y2="500"></line><line x1="512" y1="0" x2="512" y2="500"></line>
+						</g>
+						<g class="coords">
+							<text x="6" y="96">N52°</text><text x="6" y="196">N51°</text><text x="6" y="296">N50°</text><text x="6" y="396">N49°</text>
+							<text x="132" y="492">E14°</text><text x="260" y="492">E15°</text><text x="388" y="492">E16°</text><text x="516" y="492">E17°</text>
+						</g>
+						<g class="terrain">
+							<path d="M 60 420 C 90 350, 190 360, 210 410 S 160 480, 60 420 Z"></path>
+							<path d="M 75 418 C 100 370, 175 378, 190 410 S 150 462, 75 418 Z"></path>
+							<path d="M 430 90 C 500 40, 600 70, 590 140 S 470 190, 430 90 Z"></path>
+							<path d="M 455 100 C 510 64, 580 86, 570 136 S 485 165, 455 100 Z"></path>
+						</g>
+						<circle cx="370" cy="250" r="120" class="airspace"></circle>
+						<text x="300" y="138" class="airspace-label">CLASS AP · NO AI BELOW FL0</text>
+						<g transform="translate(560 410)" class="rose">
+							<circle r="46" class="rose-ring"></circle>
+							<circle r="38" class="rose-dots"></circle>
+							<path d="M0 -46 L5 -6 L0 0 L-5 -6 Z" class="mag-fill"></path>
+							<path d="M0 46 L5 6 L0 0 L-5 6 Z" class="ink-fill"></path>
+							<text x="-4" y="-52" class="rose-n">N</text>
+						</g>
+
+						<path id="chart-route" d="M 70 130 L 210 250 L 360 210 L 520 330" class="route"></path>
+						<circle cx="70" cy="130" r="9" class="ring"></circle>
+						<g transform="translate(70 130)"><path d="M -11 0 L -5.5 -9.5 L 5.5 -9.5 L 11 0 L 5.5 9.5 L -5.5 9.5 Z" class="wp"></path><circle r="2.5" class="ink-fill"></circle></g>
+						<g transform="translate(210 250)"><path d="M 0 -11 L 10 7 L -10 7 Z" class="wp"></path></g>
+						<g transform="translate(360 210)"><circle r="9" class="wp"></circle><circle r="3" class="ink-fill"></circle></g>
+						<g transform="translate(520 330)" class="airport">
+							<circle r="16" class="airport-halo"></circle>
+							<circle r="11" class="airport-ring"></circle>
+							<line x1="-7" y1="-6" x2="7" y2="6"></line><line x1="-7" y1="6" x2="7" y2="-6"></line>
+						</g>
+						<g class="wp-name"><text x="88" y="126">WORDS</text><text x="184" y="282">AGENT</text><text x="336" y="190">STEPS</text><text x="540" y="320">RUNS</text></g>
+						<g class="wp-note"><text x="88" y="140">you, plain words</text><text x="182" y="296">drives a browser</text><text x="320" y="176">saved, with screenshots</text><text x="540" y="334">daily, no AI</text></g>
+						<g class="leg-label">
+							<text x="118" y="210" transform="rotate(40 118 210)" class="mag">AI ON</text>
+							<text x="262" y="222" transform="rotate(-15 262 222)" class="mag">SAVE</text>
+							<text x="405" y="262" transform="rotate(37 405 262)" class="blue">AUTOPILOT</text>
+						</g>
+
+						<g class="plane">
+							<animateMotion dur="9s" repeatCount="indefinite" rotate="auto" keyPoints="0;0.32;0.6;1;1" keyTimes="0;0.3;0.5;0.85;1" calcMode="linear">
+								<mpath href="#chart-route"></mpath>
+							</animateMotion>
+							<g transform="scale(1.25)"><path d={JET}></path></g>
+						</g>
+
+						<path class="ink-draw" d="M 214 70 C 180 80, 150 110, 132 172"></path>
+						<path class="ink-draw" d="M 124 160 L 132 174 L 142 162"></path>
+						<text class="note" x="218" y="64">AI only on this leg!</text>
+					</svg>
+					<figcaption>SCALE 1 : 1 TEST · NOT FOR NAVIGATION</figcaption>
+				</figure>
 			</section>
 
-			<!-- Steps -->
-			<section class="section" id="how">
-				<p class="kicker" data-reveal>How it flies</p>
-				<h2 data-reveal>Three steps from words to autopilot</h2>
-				<div class="steps" data-reveal data-route>
-					<svg class="route" viewBox="0 0 1000 140" aria-hidden="true">
-						<path id="steps-route" class="route-trail" d="M 30 92 C 190 40, 330 135, 520 96 S 820 96, 975 18" pathLength="1" />
-						<g class="route-jet">
-							<animateMotion id="steps-fly" dur="2.6s" begin="indefinite" fill="freeze" rotate="auto" keyPoints="0;1" keyTimes="0;1" calcMode="spline" keySplines="0.4 0 0.2 1">
-								<mpath href="#steps-route" />
-							</animateMotion>
-							<g transform="scale(1.4)"><path d={JET} /></g>
-						</g>
-					</svg>
+			<!-- The flight plan: three legs -->
+			<section class="block" id="plan" data-reveal>
+				<div class="block-head">
+					<h2>The flight plan</h2>
+					<span class="label">FORM TP · THREE LEGS</span>
+				</div>
+				<div class="legs">
 					{
-						steps.map((s, i) => (
-							<article class="step" style={`--d: ${0.25 + i * 0.35}s`}>
-								<span class="step-n">{s.n}</span>
-								<h3>{s.title}</h3>
-								<p>{s.text}</p>
+						legs.map((l, i) => (
+							<article class="leg" style={`--d: ${0.15 + i * 0.18}s`}>
+								<div class="leg-top">
+									<span>LEG {l.n}</span>
+									<span>{l.route}</span>
+								</div>
+								<h3>{l.title}</h3>
+								<p>{l.text}</p>
+								<p class={l.on ? 'ai mag' : 'ai blue'}>{l.ai}</p>
 							</article>
 						))
 					}
+					<div class="stamp" aria-hidden="true">CLEARED · NO AI EN ROUTE</div>
 				</div>
 			</section>
 
-			<!-- Diagram -->
-			<section class="section">
-				<p class="kicker" data-reveal>Under the hood</p>
-				<h2 data-reveal>AI while you write. Autopilot when you run.</h2>
-				<div class="diagram" data-reveal>
-					<svg viewBox="0 44 900 212" role="img" aria-label="You describe the test; Testpilot's AI agent saves the steps; cloud browsers or Testpilot Desktop replay them against your app without AI">
-						{
-							flights.map((f) => (
-								<>
-									<path id={f.id} d={f.d} class="flow" />
-									<g class="flow-jet">
-										<animateMotion dur="2.4s" begin={`${f.delay}s`} repeatCount="indefinite" rotate="auto">
-											<mpath href={`#${f.id}`} />
-										</animateMotion>
-										<animate attributeName="opacity" dur="2.4s" begin={`${f.delay}s`} repeatCount="indefinite" values="0;1;1;0" keyTimes="0;0.15;0.8;1" />
-										<g transform="scale(0.55)"><path d={JET} /></g>
-									</g>
-								</>
-							))
-						}
-						<text x="201" y="140" class="d-label" text-anchor="middle">plain words</text>
-						<text x="519" y="155" class="d-label" text-anchor="middle">saved steps,</text>
-						<text x="519" y="170" class="d-label" text-anchor="middle">no AI</text>
-						{
-							boxes.map((b) => (
-								<g>
-									<rect x={b.x} y={b.y} width={b.w} height={b.h} rx="14" class="d-box" />
-									<text x={b.x + b.w / 2} y={b.y + b.h / 2 - 3} class="d-title" text-anchor="middle">{b.title}</text>
-									<text x={b.x + b.w / 2} y={b.y + b.h / 2 + 17} class="d-sub" text-anchor="middle">{b.sub}</text>
-								</g>
-							))
-						}
-						<rect x="242" y="70" width="230" height="160" rx="16" class="d-core" />
-						<g transform="translate(262 88) scale(0.68) translate(-3.5 3.6)">
-							<path d={TICK} class="m-tick" />
-							<path d={JET} class="m-jet" transform={JET_AT_REST} />
-						</g>
-						<text x="300" y="111" class="d-core-title">Testpilot</text>
-						<text x="262" y="148" class="d-sub">The AI agent drives a real browser</text>
-						<text x="262" y="166" class="d-sub">and saves every action as a step.</text>
-						<rect x="262" y="186" width="150" height="26" rx="13" class="d-pill" />
-						<text x="337" y="203" class="d-pill-text" text-anchor="middle">AI only while writing</text>
-					</svg>
+			<!-- Comparison as the chart legend -->
+			<section class="block" data-reveal>
+				<div class="block-head">
+					<h2>AI where it helps, not on every run</h2>
+					<span class="label">CHART LEGEND</span>
 				</div>
-			</section>
-
-			<!-- Comparison -->
-			<section class="section">
-				<p class="kicker" data-reveal>Why it matters</p>
-				<h2 data-reveal>AI where it helps, not on every run</h2>
-				<div class="compare" data-reveal role="table" aria-label="Testpilot compared with hand-written scripts and AI on every step">
-					<div class="c-row c-head" role="row">
-						<span role="columnheader"></span>
-						<span role="columnheader">Hand-written scripts</span>
-						<span role="columnheader">AI on every step</span>
-						<span role="columnheader" class="c-win">Testpilot <em>Best of both</em></span>
-					</div>
-					{
-						rows.map((r, i) => (
-							<div class="c-row" role="row">
-								<span role="rowheader">{r.label}</span>
-								{r.v.map((ok, j) => (
-									<span role="cell" class={j === 2 ? 'c-win' : ''} aria-label={ok ? 'Yes' : 'No'}>
-										{ok ? (
-											<svg class="c-tick" viewBox="2.5 9.5 32 32" width="24" height="24" style={`--d: ${0.2 + i * 0.12 + j * 0.05}s`} aria-hidden="true">
+				<div class="table-wrap">
+					<table class="legend">
+						<thead>
+							<tr>
+								<th><span class="sr">Criterion</span></th>
+								<th>Hand-written scripts</th>
+								<th>AI on every step</th>
+								<th class="win">Testpilot</th>
+							</tr>
+						</thead>
+						<tbody>
+							{
+								rows.map((r, i) => (
+									<tr>
+										<td>{r.label}</td>
+										{r.v.map((ok) => (
+											<td class={ok ? 'hand yes' : 'hand no'}>{ok ? '✓ yes' : '✗ no'}</td>
+										))}
+										<td class="win">
+											<svg class="tick" viewBox="3 14 32 24" width="30" height="24" role="img" aria-label="Yes" style={`--d: ${0.2 + i * 0.12}s`}>
 												<path d={TICK} />
 											</svg>
-										) : (
-											<svg class="c-cross" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-												<path d="M6 6 L18 18 M18 6 L6 18" />
-											</svg>
-										)}
-									</span>
-								))}
-							</div>
-						))
-					}
+										</td>
+									</tr>
+								))
+							}
+						</tbody>
+					</table>
 				</div>
 			</section>
 
-			<!-- Features -->
-			<section class="section" id="why">
-				<p class="kicker" data-reveal>Why Testpilot</p>
-				<h2 data-reveal>Everything on board</h2>
-				<div class="features">
+			<!-- Notices to testers: the features -->
+			<section class="block" id="notices" data-reveal>
+				<div class="block-head">
+					<h2>Notices to testers</h2>
+					<span class="label">NOTAMS · IN FORCE</span>
+				</div>
+				<div class="notices">
 					{
-						features.map((f, i) => (
-							<article class="feature" data-reveal style={`--d: ${(i % 3) * 0.08}s`}>
-								<span class="f-icon">
-									<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" set:html={icons[f.icon]} />
-								</span>
-								<h3>{f.title}</h3>
-								<p>{f.text}</p>
+						notices.map((n, i) => (
+							<article class="notice" style={`--d: ${(i % 2) * 0.1 + Math.floor(i / 2) * 0.08}s`}>
+								<span class="notice-code">{n.code}</span>
+								<h3>{n.title}</h3>
+								<p>{n.text}</p>
 							</article>
 						))
 					}
 				</div>
 			</section>
 
-			<!-- Final call to action -->
-			<section class="final" data-reveal>
-				<svg class="final-trail" viewBox="0 0 1200 200" preserveAspectRatio="none" aria-hidden="true">
-					<path d="M -20 170 C 300 160, 600 120, 1220 20" />
-				</svg>
-				<h2>Ready for take-off?</h2>
-				<p>Run Testpilot on your machine in a few minutes, then write your first test by chatting.</p>
-				<div class="cta">
-					<a class="btn btn-primary takeoff" href={docs('getting-started')}>
-						Get started
-						<svg viewBox="-12 -12 24 24" width="18" height="18" aria-hidden="true"><path d={JET} /></svg>
-					</a>
-					<a class="btn btn-ghost" href={docs('test-machine-setup')}>Set up a test machine</a>
+			<!-- Call to action -->
+			<section class="block final-wrap" data-reveal>
+				<div class="final">
+					<div>
+						<p class="hand-note">your route starts here ↓</p>
+						<h2>File your first flight plan.</h2>
+						<p class="final-text">Run Testpilot on your machine in minutes, then plot your first test by chatting.</p>
+					</div>
+					<div class="final-actions">
+						<a class="btn btn-mag btn-big" href={docs('getting-started')}>Get started →</a>
+						<a class="btn btn-line" href={docs('test-machine-setup')}>Set up a test machine</a>
+					</div>
 				</div>
 			</section>
 		</main>
 
 		<footer class="foot">
 			<a class="brand" href={`${base}/`}>
-				<svg viewBox={MARK_VIEWBOX} width="22" height="22" aria-hidden="true">
-					<path d={TICK} class="m-tick" />
-					<path d={JET} class="m-jet" transform={JET_AT_REST} />
+				<svg viewBox={MARK_VIEWBOX} width="24" height="24" aria-hidden="true">
+					<path d={TICK} class="ink-fill" />
+					<path d={JET} class="mag-fill" transform={JET_AT_REST} />
 				</svg>
 				<span>Testpilot</span>
 			</a>
@@ -288,7 +256,7 @@ const boxes = [
 		</footer>
 
 		<script>
-			// Reveal sections as they scroll in; the steps route also launches its jet once.
+			// Sections reveal (and their stamps and ticks play) once they scroll into view.
 			const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 			const items = document.querySelectorAll<HTMLElement>('[data-reveal]');
 			if (reduce || !('IntersectionObserver' in window)) {
@@ -298,16 +266,11 @@ const boxes = [
 					(entries) => {
 						for (const e of entries) {
 							if (!e.isIntersecting) continue;
-							const el = e.target as HTMLElement;
-							el.classList.add('in');
-							if (el.hasAttribute('data-route')) {
-								const fly = el.querySelector('#steps-fly') as SVGAnimationElement | null;
-								setTimeout(() => fly?.beginElement(), 250);
-							}
-							io.unobserve(el);
+							(e.target as HTMLElement).classList.add('in');
+							io.unobserve(e.target);
 						}
 					},
-					{ threshold: 0.25 },
+					{ threshold: 0.2 },
 				);
 				items.forEach((el) => io.observe(el));
 			}
@@ -317,18 +280,17 @@ const boxes = [
 
 <style is:global>
 	:root {
-		--bg: #08080a;
-		--surface: #111115;
-		--surface-2: #16161b;
-		--border: #24242b;
-		--border-strong: #34343c;
-		--text: #ededef;
-		--text-2: #c8c8ce;
-		--muted: #9898a2;
-		--brand: #5e6ad2;
-		--brand-hi: #8b93ec;
-		--brand-soft: rgba(94, 106, 210, 0.14);
-		color-scheme: dark;
+		--paper: #f3eee2;
+		--paper-2: #f8f4ea;
+		--ink: #1f2b45;
+		--ink-2: #45506a;
+		--muted: #8a8270;
+		--rule: #b3a888;
+		--grid: #d9cfb7;
+		--mag: #b8336a;
+		--mag-dark: #8f2552;
+		--blue: #2f6db5;
+		color-scheme: light;
 	}
 	* {
 		box-sizing: border-box;
@@ -338,575 +300,502 @@ const boxes = [
 	}
 	body {
 		margin: 0;
-		background: var(--bg);
-		color: var(--text);
+		color: var(--ink);
 		font-family: Geist, system-ui, sans-serif;
+		background-color: var(--paper);
+		background-image: radial-gradient(rgba(31, 43, 69, 0.07) 1px, transparent 1px);
+		background-size: 22px 22px;
 		-webkit-font-smoothing: antialiased;
 		overflow-x: hidden;
 	}
 	a {
 		color: inherit;
 	}
-	.m-tick {
-		fill: var(--text);
-		stroke: var(--text);
-		stroke-width: 1;
-		stroke-linejoin: round;
+	.ink-fill {
+		fill: var(--ink);
 	}
-	.m-jet {
-		fill: var(--brand-hi);
-		stroke: var(--brand-hi);
-		stroke-width: 0.8;
-		stroke-linejoin: round;
+	.mag-fill {
+		fill: var(--mag);
+	}
+	.label {
+		margin: 0;
+		font-family: 'IBM Plex Mono', monospace;
+		font-size: 13px;
+		letter-spacing: 0.12em;
+		color: var(--mag);
+	}
+	.sr {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip: rect(0 0 0 0);
 	}
 
-	/* Nav */
-	.nav {
-		position: sticky;
-		top: 0;
-		z-index: 10;
+	/* Header */
+	.top {
+		max-width: 1240px;
+		margin: 0 auto;
+		padding: 22px 24px;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		gap: 16px;
-		padding: 14px max(16px, calc((100vw - 1120px) / 2));
-		background: rgba(8, 8, 10, 0.72);
-		backdrop-filter: blur(12px);
-		border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+		flex-wrap: wrap;
+		border-bottom: 1.5px solid var(--ink);
 	}
 	.brand {
 		display: inline-flex;
 		align-items: center;
 		gap: 10px;
 		text-decoration: none;
-		font-weight: 650;
-		font-size: 17px;
-		letter-spacing: -0.02em;
+		font-family: Fraunces, serif;
+		font-weight: 600;
+		font-size: 24px;
 	}
-	.nav nav {
+	.top nav {
 		display: flex;
 		align-items: center;
-		gap: 22px;
-		font-size: 14px;
+		gap: 24px;
+		font-family: 'IBM Plex Mono', monospace;
+		font-size: 13.5px;
 	}
-	.nav nav a:not(.btn) {
-		color: var(--muted);
+	.top nav a:not(.btn) {
 		text-decoration: none;
-		transition: color 0.15s;
+		background: linear-gradient(var(--mag), var(--mag)) 0 100% / 0 1.5px no-repeat;
+		transition: background-size 0.25s;
 	}
-	.nav nav a:not(.btn):hover {
-		color: var(--text);
+	.top nav a:not(.btn):hover {
+		background-size: 100% 1.5px;
 	}
 
 	/* Buttons */
 	.btn {
 		display: inline-flex;
 		align-items: center;
-		gap: 10px;
-		height: 46px;
+		height: 50px;
 		padding: 0 22px;
-		border-radius: 10px;
-		font-size: 15px;
+		border-radius: 3px;
+		font-family: 'IBM Plex Mono', monospace;
 		font-weight: 600;
+		font-size: 15px;
 		text-decoration: none;
-		transition: transform 0.15s, background 0.15s, border-color 0.15s, box-shadow 0.2s;
+		transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
 	}
-	.btn-small {
-		height: 34px;
-		padding: 0 14px;
+	.btn-ink {
+		height: 38px;
+		padding: 0 16px;
+		background: var(--ink);
+		color: var(--paper);
 		font-size: 13.5px;
-		background: var(--brand);
+	}
+	.btn-mag {
+		background: var(--mag);
 		color: #fff;
+		box-shadow: 3px 3px 0 var(--ink);
 	}
-	.btn-small:hover {
-		background: #6d78e0;
+	.btn-mag:hover {
+		transform: translate(-2px, -2px);
+		box-shadow: 5px 5px 0 var(--ink);
 	}
-	.btn-primary {
-		background: var(--brand);
-		color: #fff;
-		box-shadow: 0 8px 30px rgba(94, 106, 210, 0.35);
+	.btn-line {
+		border: 1.5px solid var(--ink);
+		font-weight: 500;
 	}
-	.btn-primary:hover {
-		background: #6d78e0;
-		transform: translateY(-1px);
-		box-shadow: 0 12px 40px rgba(94, 106, 210, 0.5);
+	.btn-line:hover {
+		background: rgba(31, 43, 69, 0.06);
 	}
-	.btn-ghost {
-		border: 1px solid var(--border-strong);
-		color: var(--text-2);
-	}
-	.btn-ghost:hover {
-		border-color: var(--brand);
-		color: var(--text);
-	}
-	.takeoff svg {
-		fill: #fff;
-		transform: rotate(-30deg);
-		transition: transform 0.2s;
-		overflow: visible;
-	}
-	.takeoff:hover svg {
-		animation: takeoff 0.9s ease-in forwards;
-	}
-	@keyframes takeoff {
-		0% {
-			transform: rotate(-30deg);
-		}
-		45% {
-			transform: translate(26px, -16px) rotate(-30deg);
-			opacity: 0;
-		}
-		46% {
-			transform: translate(-22px, 12px) rotate(-30deg);
-			opacity: 0;
-		}
-		100% {
-			transform: rotate(-30deg);
-			opacity: 1;
-		}
+	.btn-big {
+		height: 58px;
+		font-size: 17px;
+		box-shadow: 4px 4px 0 var(--ink);
 	}
 
 	/* Hero */
 	.hero {
-		position: relative;
-		min-height: calc(100vh - 63px);
-		display: grid;
-		place-items: center;
-		padding: 72px 16px 96px;
-		overflow: hidden;
-		isolation: isolate;
-	}
-	.hero-grid {
-		position: absolute;
-		inset: 0;
-		z-index: -2;
-		background-image: linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
-			linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
-		background-size: 56px 56px;
-		mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 30%, transparent 75%);
-	}
-	.hero-glow {
-		position: absolute;
-		z-index: -1;
-		width: 760px;
-		height: 760px;
-		left: 50%;
-		top: 38%;
-		transform: translate(-50%, -50%);
-		background: radial-gradient(circle, rgba(94, 106, 210, 0.28), transparent 62%);
-		filter: blur(20px);
-		animation: breathe 7s ease-in-out infinite;
-	}
-	@keyframes breathe {
-		50% {
-			opacity: 0.65;
-			transform: translate(-50%, -50%) scale(1.08);
-		}
-	}
-	.sky {
-		position: absolute;
-		inset: 0;
-		width: 100%;
-		height: 100%;
-		z-index: -1;
-	}
-	.sky-trail {
-		fill: none;
-		stroke: var(--brand-hi);
-		stroke-opacity: 0.28;
-		stroke-width: 2;
-		stroke-dasharray: 2 12;
-		stroke-linecap: round;
-		animation: flow 1.6s linear infinite;
-	}
-	.sky-jet path {
-		fill: var(--brand-hi);
-		opacity: 0.55;
-	}
-	@keyframes flow {
-		to {
-			stroke-dashoffset: -14;
-		}
-	}
-	.hero-inner {
-		max-width: 860px;
-		text-align: center;
+		max-width: 1240px;
+		margin: 0 auto;
+		padding: 56px 24px 0;
 		display: flex;
-		flex-direction: column;
+		flex-wrap: wrap;
 		align-items: center;
+		gap: 44px;
 	}
-	.hero-mark {
-		margin-bottom: 18px;
-		filter: drop-shadow(0 10px 40px rgba(94, 106, 210, 0.35));
+	.hero-copy {
+		flex: 1 1 500px;
+		min-width: 0;
 	}
-	.h-trail {
-		fill: none;
-		stroke: #fff;
-		stroke-width: 12;
-		stroke-linejoin: round;
-		stroke-dasharray: 40;
-		animation: draw 1.6s 0.2s both;
+	h1 {
+		margin: 18px 0 0;
+		font-family: Fraunces, serif;
+		font-weight: 600;
+		font-size: clamp(44px, 5vw, 70px);
+		line-height: 1;
+		letter-spacing: -0.03em;
 	}
-	.h-jet {
-		animation: fly 1.6s 0.2s both;
+	h1 em {
+		color: var(--mag);
 	}
-	@keyframes fly {
-		0% {
-			transform: translate(4px, 21.4px) rotate(36.5deg) scale(0.45);
-			opacity: 0;
-			animation-timing-function: ease-in;
-		}
-		10% {
-			opacity: 1;
-		}
-		27% {
-			transform: translate(16.3px, 30.5px) rotate(36.5deg) scale(0.6);
-			animation-timing-function: linear;
-		}
-		33% {
-			transform: translate(19.6px, 30.5px) rotate(-49deg) scale(0.64);
-			animation-timing-function: linear;
-		}
-		70% {
-			transform: translate(31.5px, 16.8px) rotate(-46deg) scale(0.72);
-			animation-timing-function: cubic-bezier(0.2, 0.7, 0.3, 1);
-		}
-		100% {
-			transform: translate(39.2px, 9.2px) rotate(-45deg) scale(0.74);
-			opacity: 1;
-		}
+	.lede {
+		margin: 24px 0 0;
+		max-width: 470px;
+		font-size: 18px;
+		line-height: 1.65;
+		color: var(--ink-2);
 	}
-	@keyframes draw {
-		0% {
-			stroke-dashoffset: 40;
-			animation-timing-function: ease-in;
-		}
-		27% {
-			stroke-dashoffset: 29;
-			animation-timing-function: linear;
-		}
-		33% {
-			stroke-dashoffset: 23.5;
-			animation-timing-function: linear;
-		}
-		70%,
-		100% {
-			stroke-dashoffset: 0;
-		}
+	.cta {
+		margin-top: 30px;
+		display: flex;
+		gap: 12px;
+		flex-wrap: wrap;
 	}
 	.rise {
-		animation: rise 0.8s var(--d, 0s) cubic-bezier(0.2, 0.7, 0.2, 1) both;
+		animation: rise 0.9s var(--d, 0s) cubic-bezier(0.2, 0.7, 0.2, 1) both;
 	}
 	@keyframes rise {
 		from {
 			opacity: 0;
-			transform: translateY(18px);
-			filter: blur(6px);
+			transform: translateY(16px);
 		}
 		to {
 			opacity: 1;
 			transform: none;
-			filter: none;
 		}
 	}
-	.eyebrow {
-		margin: 0 0 18px;
-		padding: 6px 14px;
-		border-radius: 999px;
-		border: 1px solid rgba(139, 147, 236, 0.35);
-		background: var(--brand-soft);
-		color: var(--brand-hi);
-		font-size: 13px;
-		font-weight: 500;
-	}
-	h1 {
+
+	/* Chart */
+	.chart {
+		flex: 1 1 560px;
+		min-width: 0;
 		margin: 0;
-		font-size: clamp(40px, 7vw, 76px);
-		line-height: 1.04;
-		letter-spacing: -0.045em;
-		font-weight: 700;
+		position: relative;
+		background: var(--paper-2);
+		border: 1.5px solid var(--ink);
+		box-shadow: 8px 8px 0 rgba(31, 43, 69, 0.12);
 	}
-	.shine {
-		background: linear-gradient(100deg, #c7cbf5 0%, #8b93ec 40%, #ffffff 50%, #8b93ec 60%, #c7cbf5 100%);
-		background-size: 250% 100%;
-		-webkit-background-clip: text;
-		background-clip: text;
-		color: transparent;
-		animation: shine 6s 2s ease-in-out infinite;
+	.chart svg {
+		display: block;
+		width: 100%;
+		height: auto;
+		font-family: 'IBM Plex Mono', monospace;
 	}
-	@keyframes shine {
-		0%,
-		60% {
-			background-position: 100% 0;
-		}
-		100% {
-			background-position: 0% 0;
-		}
-	}
-	.lede {
-		max-width: 620px;
-		margin: 22px 0 0;
-		font-size: 18px;
-		line-height: 1.6;
+	.chart figcaption {
+		position: absolute;
+		right: 14px;
+		top: 10px;
+		font-family: 'IBM Plex Mono', monospace;
+		font-size: 10.5px;
 		color: var(--muted);
 	}
-	.cta {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: center;
-		gap: 12px;
-		margin-top: 34px;
+	.grid line {
+		stroke: var(--grid);
+		stroke-width: 1;
+	}
+	.coords text {
+		fill: #a39a82;
+		font-size: 10px;
+	}
+	.terrain path {
+		fill: none;
+		stroke: #c8b98f;
+		stroke-width: 1.2;
+	}
+	.airspace {
+		fill: rgba(47, 109, 181, 0.05);
+		stroke: var(--blue);
+		stroke-width: 1.4;
+		stroke-dasharray: 3 5;
+	}
+	.airspace-label {
+		fill: var(--blue);
+		font-size: 10.5px;
+	}
+	.rose-ring {
+		fill: none;
+		stroke: var(--ink);
+		stroke-width: 1;
+	}
+	.rose-dots {
+		fill: none;
+		stroke: var(--ink);
+		stroke-width: 0.6;
+		stroke-dasharray: 1 4;
+	}
+	.rose-n {
+		fill: var(--ink);
+		font-size: 11px;
+		font-weight: 600;
+	}
+	.route {
+		fill: none;
+		stroke: var(--mag);
+		stroke-width: 3;
+		stroke-dasharray: 6 7;
+		animation: march 1.4s linear infinite;
+	}
+	@keyframes march {
+		to {
+			stroke-dashoffset: -13;
+		}
+	}
+	.ring {
+		fill: none;
+		stroke: var(--mag);
+		stroke-width: 2;
+		transform-box: fill-box;
+		transform-origin: center;
+		animation: ring 4s ease-out infinite;
+	}
+	@keyframes ring {
+		0% {
+			transform: scale(0.6);
+			opacity: 0.9;
+		}
+		100% {
+			transform: scale(1.7);
+			opacity: 0;
+		}
+	}
+	.wp {
+		fill: var(--paper-2);
+		stroke: var(--ink);
+		stroke-width: 2;
+	}
+	.airport-halo {
+		fill: var(--blue);
+		opacity: 0.14;
+	}
+	.airport-ring {
+		fill: var(--paper-2);
+		stroke: var(--blue);
+		stroke-width: 2.4;
+	}
+	.airport line {
+		stroke: var(--blue);
+		stroke-width: 2.4;
+	}
+	.wp-name text {
+		fill: var(--ink);
+		font-size: 12px;
+		font-weight: 600;
+	}
+	.wp-note text {
+		fill: var(--ink-2);
+		font-size: 10px;
+	}
+	.leg-label text {
+		font-size: 10.5px;
+		font-weight: 600;
+	}
+	.mag {
+		fill: var(--mag);
+		color: var(--mag);
+	}
+	.blue {
+		fill: var(--blue);
+		color: var(--blue);
+	}
+	.plane path {
+		fill: var(--ink);
+		stroke: var(--paper-2);
+		stroke-width: 1.2;
+	}
+	.ink-draw {
+		fill: none;
+		stroke: var(--ink);
+		stroke-width: 1.8;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		stroke-dasharray: 160;
+		stroke-dashoffset: 160;
+		animation: ink 1.4s 1.6s ease-in-out forwards;
+	}
+	@keyframes ink {
+		to {
+			stroke-dashoffset: 0;
+		}
+	}
+	.note {
+		fill: var(--ink);
+		font-family: Caveat, cursive;
+		font-size: 26px;
+		opacity: 0;
+		animation: fade 0.8s 2.4s ease forwards;
+	}
+	@keyframes fade {
+		to {
+			opacity: 1;
+		}
 	}
 
 	/* Sections */
-	.section {
-		max-width: 1120px;
+	.block {
+		max-width: 1240px;
 		margin: 0 auto;
-		padding: 110px 16px 0;
-		text-align: center;
+		padding: 110px 24px 0;
 	}
-	.kicker {
-		margin: 0;
-		color: var(--brand-hi);
-		font-size: 13px;
-		font-weight: 600;
-		letter-spacing: 0.14em;
-		text-transform: uppercase;
+	.block-head {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 16px;
+		flex-wrap: wrap;
+		border-bottom: 1.5px solid var(--ink);
+		padding-bottom: 14px;
 	}
 	h2 {
-		margin: 12px auto 0;
-		max-width: 760px;
-		font-size: clamp(30px, 4.4vw, 46px);
-		line-height: 1.1;
-		letter-spacing: -0.035em;
+		margin: 0;
+		font-family: Fraunces, serif;
+		font-weight: 600;
+		font-size: clamp(34px, 4.4vw, 54px);
+		letter-spacing: -0.02em;
+		line-height: 1.05;
 	}
 	[data-reveal] {
 		opacity: 0;
-		transform: translateY(24px);
-		transition: opacity 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0s), transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0s);
+		transform: translateY(22px);
+		transition: opacity 0.8s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
 	}
 	[data-reveal].in {
 		opacity: 1;
 		transform: none;
 	}
 
-	/* Steps */
-	.steps {
+	/* Legs */
+	.legs {
 		position: relative;
+		overflow-x: clip;
 		display: grid;
 		grid-template-columns: repeat(3, minmax(0, 1fr));
-		gap: 24px;
-		margin-top: 56px;
-		text-align: left;
 	}
-	.route {
-		position: absolute;
-		left: 0;
-		right: 0;
-		top: -46px;
-		width: 100%;
-		height: auto;
-		aspect-ratio: 1000 / 140;
-		overflow: visible;
-		pointer-events: none;
-	}
-	.route-trail {
-		fill: none;
-		stroke: var(--brand-hi);
-		stroke-opacity: 0.45;
-		stroke-width: 2;
-		stroke-linecap: round;
-		stroke-dasharray: 1;
-		stroke-dashoffset: 1;
-	}
-	.steps.in .route-trail {
-		transition: stroke-dashoffset 2.6s cubic-bezier(0.4, 0, 0.2, 1) 0.25s;
-		stroke-dashoffset: 0;
-	}
-	.route-jet {
+	.leg {
+		padding: 28px 26px 30px;
+		border-right: 1px dashed var(--rule);
+		border-bottom: 1px dashed var(--rule);
 		opacity: 0;
+		transform: translateY(14px);
+		transition: opacity 0.7s var(--d), transform 0.7s var(--d), background 0.2s;
 	}
-	.steps.in .route-jet {
-		opacity: 1;
-		transition: opacity 0.3s 0.25s;
+	.leg:last-of-type {
+		border-right: 0;
 	}
-	.route-jet path {
-		fill: var(--brand-hi);
-	}
-	.step {
-		position: relative;
-		margin-top: 44px;
-		padding: 26px 24px 28px;
-		border-radius: 18px;
-		background: linear-gradient(180deg, var(--surface-2), var(--surface));
-		border: 1px solid var(--border);
-		opacity: 0;
-		transform: translateY(20px);
-		transition: opacity 0.7s var(--d), transform 0.7s var(--d), border-color 0.2s;
-	}
-	.steps.in .step {
+	.in .leg {
 		opacity: 1;
 		transform: none;
 	}
-	.step:hover {
-		border-color: rgba(139, 147, 236, 0.5);
+	.leg:hover {
+		background: rgba(184, 51, 106, 0.04);
 	}
-	.step-n {
-		font-size: 13px;
-		font-weight: 700;
-		color: var(--brand-hi);
-		letter-spacing: 0.08em;
-	}
-	.step h3 {
-		margin: 10px 0 8px;
-		font-size: 22px;
-		letter-spacing: -0.02em;
-	}
-	.step p {
-		margin: 0;
-		color: var(--muted);
-		line-height: 1.55;
-	}
-
-	/* Diagram */
-	.diagram {
-		margin-top: 48px;
-		padding: 28px;
-		border-radius: 22px;
-		background: radial-gradient(ellipse at 40% 0%, rgba(94, 106, 210, 0.12), transparent 60%), var(--surface);
-		border: 1px solid var(--border);
-	}
-	.diagram svg {
-		width: 100%;
-		height: auto;
-		font-family: Geist, system-ui, sans-serif;
-	}
-	.flow {
-		fill: none;
-		stroke: var(--brand-hi);
-		stroke-width: 2;
-		stroke-dasharray: 1 5;
-		stroke-linecap: round;
-		animation: flow 0.9s linear infinite;
-	}
-	.flow-jet path {
-		fill: var(--brand-hi);
-	}
-	.d-box {
-		fill: var(--surface-2);
-		stroke: var(--border-strong);
-	}
-	.d-core {
-		fill: #1a1c33;
-		stroke: var(--brand);
-		stroke-width: 1.5;
-		filter: drop-shadow(0 0 18px rgba(94, 106, 210, 0.35));
-	}
-	.d-title {
-		fill: var(--text);
-		font-size: 15px;
-		font-weight: 600;
-	}
-	.d-core-title {
-		fill: var(--text);
-		font-size: 17px;
-		font-weight: 700;
-	}
-	.d-sub {
-		fill: var(--muted);
-		font-size: 12.5px;
-	}
-	.d-label {
-		fill: var(--muted);
-		font-size: 12px;
-	}
-	.d-pill {
-		fill: #262a4d;
-	}
-	.d-pill-text {
-		fill: var(--brand-hi);
-		font-size: 12px;
-		font-weight: 600;
-	}
-
-	/* Comparison */
-	.compare {
-		margin: 48px auto 0;
-		max-width: 920px;
-		text-align: left;
-	}
-	.c-row {
-		display: grid;
-		grid-template-columns: 1.6fr 1fr 1fr 1fr;
-		align-items: center;
-		min-height: 58px;
-		border-bottom: 1px solid var(--border);
-	}
-	.c-row:last-child {
-		border-bottom: 0;
-	}
-	.c-row > span {
+	.leg-top {
 		display: flex;
-		justify-content: center;
-		align-items: center;
-		height: 100%;
-		padding: 0 8px;
-	}
-	.c-row > span:first-child {
-		justify-content: flex-start;
-		color: var(--text-2);
-		font-size: 15.5px;
-	}
-	.c-head {
-		border-bottom-color: var(--border-strong);
-	}
-	.c-head > span {
+		justify-content: space-between;
+		font-family: 'IBM Plex Mono', monospace;
+		font-size: 12.5px;
 		color: var(--muted);
-		font-size: 14px;
+	}
+	.leg h3 {
+		margin: 14px 0 0;
+		font-family: Fraunces, serif;
+		font-weight: 600;
+		font-size: 32px;
+	}
+	.leg p {
+		margin: 10px 0 0;
+		color: var(--ink-2);
+		line-height: 1.6;
+		font-size: 16px;
+	}
+	.leg .ai {
+		margin-top: 18px;
+		font-family: 'IBM Plex Mono', monospace;
+		font-size: 12.5px;
 		font-weight: 600;
 	}
-	.c-head .c-win {
-		flex-direction: column;
-		gap: 6px;
-		color: var(--brand-hi);
+	.stamp {
+		position: absolute;
+		right: 40px;
+		bottom: -26px;
+		padding: 10px 18px;
+		border: 3px solid var(--mag);
+		color: var(--mag);
+		font-family: 'IBM Plex Mono', monospace;
+		font-weight: 600;
+		font-size: 18px;
+		letter-spacing: 0.12em;
+		background: rgba(243, 238, 226, 0.88);
+		opacity: 0;
+		transform: scale(1.6) rotate(-14deg);
+	}
+	.in .stamp {
+		animation: stamp 0.45s 0.9s cubic-bezier(0.3, 1.4, 0.6, 1) forwards;
+	}
+	@keyframes stamp {
+		to {
+			opacity: 0.92;
+			transform: scale(1) rotate(-8deg);
+		}
+	}
+
+	/* Legend table */
+	.table-wrap {
+		overflow-x: auto;
+	}
+	.legend {
+		width: 100%;
+		min-width: 720px;
+		border-collapse: collapse;
+		margin-top: 8px;
 		font-size: 16px;
-		font-weight: 700;
-		padding-top: 18px;
-		border-radius: 18px 18px 0 0;
 	}
-	.c-head em {
-		order: -1;
-		white-space: nowrap;
-		font-style: normal;
-		font-size: 11.5px;
-		padding: 4px 10px;
-		border-radius: 999px;
-		background: var(--brand);
+	.legend th {
+		padding: 16px 12px;
+		font-family: 'IBM Plex Mono', monospace;
+		font-size: 13px;
+		font-weight: 500;
+		color: var(--muted);
+	}
+	.legend th.win {
 		color: #fff;
+		background: var(--mag);
+		font-weight: 600;
 	}
-	.c-win {
-		background: rgba(94, 106, 210, 0.1);
-		border-left: 1px solid rgba(139, 147, 236, 0.45);
-		border-right: 1px solid rgba(139, 147, 236, 0.45);
+	.legend tr + tr td,
+	.legend tbody tr:first-child td {
+		border-top: 1px dashed var(--rule);
 	}
-	.c-row:last-child .c-win {
-		border-bottom: 1px solid rgba(139, 147, 236, 0.45);
-		border-radius: 0 0 18px 18px;
+	.legend td {
+		padding: 16px 12px;
+		text-align: center;
 	}
-	.compare.in .c-head .c-win {
-		box-shadow: 0 -12px 40px -12px rgba(94, 106, 210, 0.55);
+	.legend td:first-child {
+		text-align: left;
+		font-family: Fraunces, serif;
+		font-size: 19px;
 	}
-	.c-tick path {
-		fill: var(--text);
+	.legend td.win {
+		background: rgba(184, 51, 106, 0.08);
+		border-left: 1.5px solid var(--mag);
+		border-right: 1.5px solid var(--mag);
 	}
-	.c-win .c-tick path {
-		fill: var(--brand-hi);
+	.hand {
+		font-family: Caveat, cursive;
+		font-size: 26px;
 	}
-	.c-tick {
+	.hand.yes {
+		color: var(--ink);
+	}
+	.hand.no {
+		color: #a39a82;
+	}
+	.tick path {
+		fill: var(--mag);
+	}
+	.tick {
 		transform: scale(0);
+		transform-origin: center;
 	}
-	.compare.in .c-tick {
-		animation: pop 0.45s var(--d) cubic-bezier(0.3, 1.6, 0.5, 1) both;
+	.in .tick {
+		animation: pop 0.45s var(--d) cubic-bezier(0.3, 1.6, 0.5, 1) forwards;
 	}
 	@keyframes pop {
 		from {
@@ -916,120 +805,94 @@ const boxes = [
 			transform: none;
 		}
 	}
-	.c-cross path {
-		stroke: #4a4a54;
-		stroke-width: 2.4;
-		stroke-linecap: round;
-	}
 
-	/* Features */
-	.features {
+	/* Notices */
+	.notices {
 		display: grid;
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-		gap: 18px;
-		margin-top: 48px;
-		text-align: left;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0 48px;
 	}
-	.feature {
-		padding: 24px;
-		border-radius: 18px;
-		background: var(--surface);
-		border: 1px solid var(--border);
-		transition: opacity 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d), transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d),
-			border-color 0.2s, background 0.2s;
+	.notice {
+		padding: 26px 0 24px;
+		border-bottom: 1px dashed var(--rule);
+		opacity: 0;
+		transform: translateY(12px);
+		transition: opacity 0.6s var(--d), transform 0.6s var(--d);
 	}
-	.feature.in:hover {
-		transform: translateY(-4px);
-		border-color: rgba(139, 147, 236, 0.5);
-		background: var(--surface-2);
-		transition-delay: 0s;
+	.in .notice {
+		opacity: 1;
+		transform: none;
 	}
-	.f-icon {
-		display: inline-grid;
-		place-items: center;
-		width: 44px;
-		height: 44px;
-		border-radius: 12px;
-		background: var(--brand-soft);
+	.notice-code {
+		font-family: 'IBM Plex Mono', monospace;
+		font-size: 12px;
+		letter-spacing: 0.1em;
+		color: var(--mag);
 	}
-	.f-icon svg {
-		fill: none;
-		stroke: var(--brand-hi);
-		stroke-width: 1.8;
-		stroke-linecap: round;
-		stroke-linejoin: round;
+	.notice h3 {
+		margin: 8px 0 6px;
+		font-family: Fraunces, serif;
+		font-weight: 600;
+		font-size: 24px;
 	}
-	.feature h3 {
-		margin: 16px 0 6px;
-		font-size: 17px;
-		letter-spacing: -0.01em;
-	}
-	.feature p {
+	.notice p {
 		margin: 0;
-		color: var(--muted);
-		line-height: 1.55;
-		font-size: 14.5px;
+		color: var(--ink-2);
+		line-height: 1.6;
 	}
 
-	/* Final call to action */
-	.final {
-		position: relative;
-		max-width: 1088px;
-		margin: 120px auto 0;
-		padding: 80px 24px 84px;
-		text-align: center;
-		border-radius: 28px;
-		background: radial-gradient(ellipse at 50% 100%, rgba(94, 106, 210, 0.3), transparent 65%), var(--surface);
-		border: 1px solid var(--border);
-		overflow: hidden;
+	/* Final */
+	.final-wrap {
+		padding-bottom: 120px;
 	}
-	.final p {
-		margin: 16px auto 0;
-		max-width: 520px;
-		color: var(--muted);
+	.final {
+		border: 1.5px solid var(--ink);
+		background: var(--paper-2);
+		box-shadow: 8px 8px 0 rgba(31, 43, 69, 0.12);
+		padding: 52px 44px;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 28px;
+	}
+	.final h2 {
+		margin-top: 6px;
+	}
+	.hand-note {
+		margin: 0;
+		font-family: Caveat, cursive;
+		font-size: 30px;
+		color: var(--mag);
+	}
+	.final-text {
+		margin: 14px 0 0;
+		color: var(--ink-2);
 		font-size: 17px;
 		line-height: 1.6;
 	}
-	.final-trail {
-		position: absolute;
-		inset: 0;
-		width: 100%;
-		height: 100%;
-		pointer-events: none;
-	}
-	.final-trail path {
-		fill: none;
-		stroke: var(--brand-hi);
-		stroke-opacity: 0.3;
-		stroke-width: 2;
-		stroke-dasharray: 2 12;
-		stroke-linecap: round;
-		vector-effect: non-scaling-stroke;
-		animation: flow 1.6s linear infinite;
-	}
-	@media (max-width: 1119px) {
-		.final {
-			margin-left: 16px;
-			margin-right: 16px;
-		}
+	.final-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 12px;
 	}
 
 	/* Footer */
 	.foot {
+		max-width: 1240px;
+		margin: 0 auto;
+		padding: 28px 24px 48px;
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
 		justify-content: space-between;
 		gap: 16px;
-		max-width: 1120px;
-		margin: 0 auto;
-		padding: 56px 16px 48px;
-		color: var(--muted);
-		font-size: 14px;
+		border-top: 1.5px solid var(--ink);
+		font-family: 'IBM Plex Mono', monospace;
+		font-size: 13px;
 	}
 	.foot .brand {
-		color: var(--text);
-		font-size: 15px;
+		font-size: 19px;
 	}
 	.foot nav {
 		display: flex;
@@ -1038,49 +901,34 @@ const boxes = [
 	}
 	.foot nav a {
 		text-decoration: none;
+		color: var(--ink-2);
 	}
 	.foot nav a:hover {
-		color: var(--text);
+		color: var(--mag);
 	}
 
 	/* Small screens */
 	@media (max-width: 860px) {
-		.nav nav a:not(.btn) {
+		.top nav a:not(.btn) {
 			display: none;
 		}
-		.steps,
-		.features {
+		.legs,
+		.notices {
 			grid-template-columns: minmax(0, 1fr);
 		}
-		.route {
-			display: none;
+		.leg {
+			border-right: 0;
 		}
-		.step {
-			margin-top: 0;
+		.stamp {
+			right: 12px;
+			font-size: 14px;
 		}
-		.c-row {
-			grid-template-columns: 1.3fr 1fr 1fr 1fr;
-		}
-		.c-row > span:first-child {
-			font-size: 13.5px;
-		}
-		.c-head > span {
-			font-size: 12px;
-		}
-		.c-head em {
-			font-size: 10px;
-			padding: 3px 7px;
-		}
-		.diagram {
-			padding: 12px;
-			overflow-x: auto;
-		}
-		.diagram svg {
-			min-width: 640px;
+		.final {
+			padding: 36px 24px;
 		}
 	}
 
-	/* Motion off: everything shows in its final state. */
+	/* Motion off: everything in its final place. */
 	@media (prefers-reduced-motion: reduce) {
 		*,
 		*::before,
@@ -1088,20 +936,24 @@ const boxes = [
 			animation: none !important;
 			transition: none !important;
 		}
-		.sky-jet,
-		.flow-jet,
-		.route-jet {
+		.plane {
 			display: none;
 		}
-		.route-trail {
+		.ink-draw {
 			stroke-dashoffset: 0;
 		}
-		.c-tick {
+		.note,
+		.leg,
+		.notice,
+		[data-reveal] {
+			opacity: 1;
 			transform: none;
 		}
-		[data-reveal],
-		.step {
-			opacity: 1;
+		.stamp {
+			opacity: 0.92;
+			transform: rotate(-8deg);
+		}
+		.tick {
 			transform: none;
 		}
 	}
