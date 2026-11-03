@@ -928,6 +928,43 @@ const notices = [
 		}
 	}
 
+	/* Phones: each criterion on its own line, the three answers below it. */
+	@media (max-width: 640px) {
+		.legend {
+			min-width: 0;
+		}
+		.legend,
+		.legend thead,
+		.legend tbody {
+			display: block;
+		}
+		.legend tr {
+			display: grid;
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+		.legend th:first-child {
+			display: none;
+		}
+		.legend th {
+			padding: 12px 6px;
+			font-size: 11px;
+			text-align: center;
+		}
+		.legend td {
+			padding: 8px 6px 12px;
+			border-top: 0 !important;
+		}
+		.legend td:first-child {
+			grid-column: 1 / -1;
+			padding: 14px 4px 4px;
+			font-size: 17px;
+			border-top: 1px dashed var(--rule) !important;
+		}
+		.hand {
+			font-size: 22px;
+		}
+	}
+
 	/* Motion off: everything in its final place. */
 	@media (prefers-reduced-motion: reduce) {
 		*,
